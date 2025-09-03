@@ -1,0 +1,42 @@
+# 🏗️ BuildPoint - Frontend
+
+Este es el **componente frontend** del proyecto formativo **BuildPoint**, una aplicación web para la venta de materiales de construcción.  
+Fue desarrollado como parte del programa **Análisis y Desarrollo de Software**.
+
+---
+
+## 🚀 Tecnologías usadas
+- ⚛️ React + Vite (frontend moderno y rápido)
+- 🎨 Tailwind CSS (estilos responsivos)
+- 🔄 Redux Toolkit (gestión de estado global)
+- 🌐 React Router DOM (navegación SPA)
+- 💾 LocalStorage (persistencia simulada de usuario y carrito)
+
+---
+
+## 🧩 Funcionalidades implementadas
+- Catálogo de productos con mock data (cemento, varillas, bloques, arena).
+- Carrito de compras con persistencia en `localStorage`.
+- Registro de usuarios con campos:
+  - Nombre completo
+  - Documento
+  - Teléfono
+  - Correo
+  - Contraseña
+- Inicio de sesión y mantenimiento de sesión (simulado con `localStorage`).
+- Dashboard de usuario con datos personales.
+- Navegación dinámica:
+  - Si el usuario está autenticado → muestra **Perfil**.
+  - Si el usuario no ha iniciado sesión → muestra **Ingresar / Registrarse**.
+- Cierre de sesión que limpia la información.
+
+---
+
+
+## Ejecucion
+
+- npm install 
+- npm run dev
+
+
+

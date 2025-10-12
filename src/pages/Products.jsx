@@ -1,46 +1,62 @@
-import React from "react";
-import { useDispatch } from "react-redux";
-import { addToCart } from "../redux/slices/cartSlice";
-
-// Lista de productos "mockeados" (simulación sin backend)
-const products = [
-  { id: 1, name: "Cemento Gris", price: 25000, image: "" },
-  { id: 2, name: "Varilla de acero 1/2''", price: 12000, image: "" },
-  { id: 3, name: "Arena de construcción", price: 8000, image: "" },
-  { id: 4, name: "Bloque de concreto", price: 3500, image: "" },
-];
+// src/pages/Products.jsx
+import React, { useEffect, useState } from "react";
+import { getProducts, createProduct } from "../services/productService";
 
 function Products() {
-  const dispatch = useDispatch();
+  const [products, setProducts] = useState([]);
+  const [newProduct, setNewProduct] = useState({ name: "", price: "" });
 
-  // Maneja el evento de agregar al carrito
-  const handleAddToCart = (product) => {
-    dispatch(addToCart(product)); // Envia el producto al estado global (Redux)
+  useEffect(() => {
+    loadProducts();
+  }, []);
+
+  const loadProducts = async () => {
+    const data = await getProducts();
+    setProducts(data);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!newProduct.name || !newProduct.price) return;
+    await createProduct(newProduct);
+    setNewProduct({ name: "", price: "" });
+    loadProducts();
   };
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-4">Productos disponibles</h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        {products.map((product) => (
-          <div key={product.id} className="border rounded-lg shadow p-4">
-            {/* Imagen del producto */}
-            <img src={product.image} alt={product.name} className="w-full h-32 object-cover mb-2 rounded"/>
-            
-            {/* Nombre y precio */}
-            <h2 className="text-lg font-semibold">{product.name}</h2>
-            <p className="text-gray-700">${product.price.toLocaleString()}</p>
+      <h1 className="text-2xl font-bold mb-4">Productos</h1>
 
-            {/* Botón de acción */}
-            <button 
-              onClick={() => handleAddToCart(product)} 
-              className="bg-blue-600 text-white px-4 py-2 rounded mt-2"
-            >
-              Agregar al carrito
-            </button>
-          </div>
+      {/* Formulario para agregar producto */}
+      <form onSubmit={handleSubmit} className="mb-4 flex gap-2">
+        <input
+          type="text"
+          placeholder="Nombre"
+          value={newProduct.name}
+          onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })}
+          className="border p-2 rounded"
+        />
+        <input
+          type="number"
+          placeholder="Precio"
+          value={newProduct.price}
+          onChange={(e) => setNewProduct({ ...newProduct, price: e.target.value })}
+          className="border p-2 rounded"
+        />
+        <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded">
+          Agregar
+        </button>
+      </form>
+
+      {/* Lista de productos */}
+      <ul className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {products.map((p) => (
+          <li key={p.id} className="border rounded p-4 shadow">
+            <h3 className="font-semibold">{p.name}</h3>
+            <p>${p.price.toLocaleString()}</p>
+          </li>
         ))}
-      </div>
+      </ul>
     </div>
   );
 }
